@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Santwire</title>
 </head>
-<body>
+<body style="margin: 0; padding: 0; overflow: hidden;">
   <iframe 
     src="https://script.google.com/macros/s/AKfycbzBbukWchMRk1vozFgBzDp-vN1KXmbUiL3LG9W1bRb6vxfDrJ6eMWqbdgvlUoy1B-v6/exec"
     width="100%"
@@ -14,10 +16,12 @@
 
   <script>
     window.onload = function() {
+      // Note: Programmatic fullscreen requests on page load may be blocked by 
+      // modern browsers without direct user gesture/interaction.
       document.querySelector('iframe')
         .requestFullscreen()
         .catch((err) => {
-          console.error('Error attempting to enable full-screen mode:', err.message);
+          console.warn('Fullscreen request bypassed:', err.message);
         });
     };
   </script>
