@@ -3,27 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Santwire</title>
+  <title>Sant Wires</title>
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Theme colour matches app navy #0f172a -->
+  <meta name="theme-color" content="#0f172a">
+
+  <!-- iOS standalone support -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Sant Wires">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+  <!-- Register service worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+          .catch(function(err) { console.warn('SW registration failed:', err); });
+      });
+    }
+  </script>
 </head>
-<body style="margin: 0; padding: 0; overflow: hidden;">
-  <iframe 
+<body style="margin:0;padding:0;overflow:hidden;background:#0f172a;">
+  <iframe
     src="https://script.google.com/macros/s/AKfycbzBbukWchMRk1vozFgBzDp-vN1KXmbUiL3LG9W1bRb6vxfDrJ6eMWqbdgvlUoy1B-v6/exec"
     width="100%"
     height="100%"
     allowfullscreen="true"
-    style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none;">
+    style="position:fixed;top:0;left:0;width:100%;height:100%;border:none;">
   </iframe>
-
-  <script>
-    window.onload = function() {
-      // Note: Programmatic fullscreen requests on page load may be blocked by 
-      // modern browsers without direct user gesture/interaction.
-      document.querySelector('iframe')
-        .requestFullscreen()
-        .catch((err) => {
-          console.warn('Fullscreen request bypassed:', err.message);
-        });
-    };
-  </script>
 </body>
 </html>
