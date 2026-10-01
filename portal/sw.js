@@ -1,9 +1,4 @@
-// Sant Wires — Minimal Service Worker
-// Purpose: PWA install eligibility only.
-// Does NOT cache any app content, auth data, or Google Apps Script responses.
-
 const CACHE_NAME = 'santwires-shell-v2';
-
 const SHELL_FILES = [
   './',
   './manifest.json',
@@ -11,8 +6,16 @@ const SHELL_FILES = [
   './icons/icon-512.png'
 ];
 
-self.addEventListener('install', function(event) {
-  event.waitUntil(
+// URLs we must NEVER intercept — GAS / Google auth
+const PASSTHROUGH = [
+  'script.google.com',
+  'googleusercontent.com',
+  'googleapis.com',
+  'accounts.google.com'
+];
+
+self.addEventListener('install', function(e) {
+  e.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
       return cache.addAll(SHELL_FILES);
     })
@@ -20,8 +23,8 @@ self.addEventListener('install', function(event) {
   self.skipWaiting();
 });
 
-self.addEventListener('activate', function(event) {
-  event.waitUntil(
+self.addEventListener('activate', function(e) {
+  e.waitUntil(
     caches.keys().then(function(keys) {
       return Promise.all(
         keys.filter(function(k) { return k !== CACHE_NAME; })
@@ -32,21 +35,20 @@ self.addEventListener('activate', function(event) {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', function(event) {
-  var url = event.request.url;
+self.addEventListener('fetch', function(e) {
+  var url = e.request.url;
 
-  if (
-    url.indexOf('script.google.com') !== -1 ||
-    url.indexOf('googleusercontent.com') !== -1 ||
-    url.indexOf('googleapis.com') !== -1 ||
-    url.indexOf('accounts.google.com') !== -1
-  ) {
-    return;
+  // Always pass Google/GAS requests straight through — no caching
+  for (var i = 0; i < PASSTHROUGH.length; i++) {
+    if (url.indexOf(PASSTHROUGH[i]) !== -1) {
+      return; // browser handles normally
+    }
   }
 
-  event.respondWith(
-    caches.match(event.request).then(function(cached) {
-      return cached || fetch(event.request);
+  // For shell files: cache-first
+  e.respondWith(
+    caches.match(e.request).then(function(cached) {
+      return cached || fetch(e.request);
     })
   );
 });
