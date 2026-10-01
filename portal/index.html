@@ -1,39 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Sant Wires</title>
 
-  <!-- PWA manifest -->
-  <link rel="manifest" href="/manifest.json">
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="./manifest.json">
 
-  <!-- Theme colour matches app navy #0f172a -->
+  <!-- Theme -->
   <meta name="theme-color" content="#0f172a">
 
-  <!-- iOS standalone support -->
+  <!-- iOS PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Sant Wires">
-  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
 
-  <!-- Register service worker -->
+  <!-- Android / General -->
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #0f172a; }
+    iframe { position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  </style>
+
+  <!-- Service Worker registration -->
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js')
-          .catch(function(err) { console.warn('SW registration failed:', err); });
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('./sw.js')
+          .catch(function (err) { console.warn('SW registration failed:', err); });
       });
     }
   </script>
 </head>
-<body style="margin:0;padding:0;overflow:hidden;background:#0f172a;">
+<body>
   <iframe
     src="https://script.google.com/macros/s/AKfycbzBbukWchMRk1vozFgBzDp-vN1KXmbUiL3LG9W1bRb6vxfDrJ6eMWqbdgvlUoy1B-v6/exec"
-    width="100%"
-    height="100%"
     allowfullscreen="true"
-    style="position:fixed;top:0;left:0;width:100%;height:100%;border:none;">
+    allow="camera; microphone; geolocation">
   </iframe>
 </body>
 </html>
