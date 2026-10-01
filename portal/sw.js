@@ -2,13 +2,13 @@
 // Purpose: PWA install eligibility only.
 // Does NOT cache any app content, auth data, or Google Apps Script responses.
 
-const CACHE_NAME = 'santwires-shell-v1';
+const CACHE_NAME = 'santwires-shell-v2';
 
 const SHELL_FILES = [
-  '/',
-  '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png'
+  './',
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
 self.addEventListener('install', function(event) {
@@ -35,8 +35,6 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', function(event) {
   var url = event.request.url;
 
-  // NEVER intercept Google Apps Script or Google APIs.
-  // Intercepting these breaks google.script.run, auth, and all data calls.
   if (
     url.indexOf('script.google.com') !== -1 ||
     url.indexOf('googleusercontent.com') !== -1 ||
@@ -46,7 +44,6 @@ self.addEventListener('fetch', function(event) {
     return;
   }
 
-  // Shell files only: serve from cache, fall back to network.
   event.respondWith(
     caches.match(event.request).then(function(cached) {
       return cached || fetch(event.request);
